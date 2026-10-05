@@ -2,6 +2,7 @@ package org.ecom;
 
 import com.opencsv.exceptions.CsvException;
 import net.datafaker.Faker;
+import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -11,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import java.awt.*;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.Arrays;
@@ -55,7 +57,7 @@ public class SignUp extends BaseTest
        generic.dropDown(month,"6");
        WebElement year=driver.findElement(signup.year);
        generic.dropDown(year,"2001");
-       if(isAlertPresent()){
+       if(isAlertPresent(signup.popupFrame)){
            WebElement iframe=driver.findElement(signup.popupFrame);
            driver.switchTo().frame(iframe);
            driver.findElement(signup.alert).click();
@@ -72,10 +74,10 @@ public class SignUp extends BaseTest
             System.out.println(Arrays.toString(row));
         }
     }
-    public boolean isAlertPresent(){
+    public boolean isAlertPresent(By popup){
         try {
             WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(2));
-            wait.until(ExpectedConditions.visibilityOfElementLocated(signup.popupFrame));
+            wait.until(ExpectedConditions.visibilityOfElementLocated(popup));
             return true;
         }
         catch(TimeoutException | NoSuchElementException r){
